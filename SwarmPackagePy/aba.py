@@ -23,11 +23,11 @@ class aba(intelligence.sw):
 
         self.__function = function
 
-        self.__agents = np.random.uniform(lb, ub, (n, dimension))
-        self._points(self.__agents)
+        self._agents = np.random.uniform(lb, ub, (n, dimension))
+        self._points(self._agents)
 
-        Pbest = self.__agents[np.array([function(x)
-                                        for x in self.__agents]).argmin()]
+        Pbest = self._agents[np.array([function(x)
+                                        for x in self._agents]).argmin()]
         Gbest = Pbest
 
         if n <= 10:
@@ -41,48 +41,48 @@ class aba(intelligence.sw):
 
         for t in range(iteration):
 
-            fitness = [function(x) for x in self.__agents]
-            sort_fitness = [function(x) for x in self.__agents]
+            fitness = [function(x) for x in self._agents]
+            sort_fitness = [function(x) for x in self._agents]
             sort_fitness.sort()
 
-            best = [self.__agents[i] for i in
+            best = [self._agents[i] for i in
                     [fitness.index(x) for x in sort_fitness[:count[0]]]]
-            selected = [self.__agents[i]
+            selected = [self._agents[i]
                         for i in [fitness.index(x)
                                   for x in sort_fitness[count[0]:count[2]]]]
 
-            newbee = self.__new(best, count[1], lb, ub) + self.__new(selected,
+            newbee = self._newbee(best, count[1], lb, ub) + self._newbee(selected,
                                                                    count[3],
                                                                    lb, ub)
             m = len(newbee)
-            self.__agents = newbee + list(np.random.uniform(lb, ub, (n - m,
+            self._agents = newbee + list(np.random.uniform(lb, ub, (n - m,
                                                                    dimension)))
 
-            self.__agents = np.clip(self.__agents, lb, ub)
-            self._points(self.__agents)
+            self._agents = np.clip(self._agents, lb, ub)
+            self._points(self._agents)
 
-            Pbest = self.__agents[
-                np.array([function(x) for x in self.__agents]).argmin()]
+            Pbest = self._agents[
+                np.array([function(x) for x in self._agents]).argmin()]
             if function(Pbest) < function(Gbest):
                 Gbest = Pbest
 
         self._set_Gbest(Gbest)
 
-    def __new(self, l, c, lb, ub):
+    # def __new(self, l, c, lb, ub):
 
-        bee = []
-        for i in l:
-            new = [self.__neighbor(i, lb, ub) for k in range(c)]
-            bee += new
-        bee += l
+    #     bee = []
+    #     for i in l:
+    #         new = [self.__neighbor(i, lb, ub) for k in range(c)]
+    #         bee += new
+    #     bee += l
 
-        return bee
+    #     return bee
 
-    def __neighbor(self, who, lb, ub):
+    # def __neighbor(self, who, lb, ub):
 
-        neighbor = np.array(who) + uniform(-1, 1) * (
-            np.array(who) - np.array(
-                self.__agents[randint(0, len(self.__agents) - 1)]))
-        neighbor = np.clip(neighbor, lb, ub)
+    #     neighbor = np.array(who) + uniform(-1, 1) * (
+    #         np.array(who) - np.array(
+    #             self.__agents[randint(0, len(self.__agents) - 1)]))
+    #     neighbor = np.clip(neighbor, lb, ub)
 
-        return list(neighbor)
+    #     return list(neighbor)

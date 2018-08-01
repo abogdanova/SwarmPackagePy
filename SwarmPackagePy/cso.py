@@ -72,10 +72,10 @@ class cso(intelligence.sw):
                     self.__agents[fcuckoos[i][1]] = self.__nests[fnests[i][1]]
 
             self.__nests = np.clip(self.__nests, lb, ub)
-            self.__Levyfly(step, Pbest, n, dimension)
+            self._Levyfly(step, Pbest, n, dimension)
             self.__agents = np.clip(self.__agents, lb, ub)
             self._points(self.__agents)
-            self.__nest()
+            self._nest()
 
             Pbest = self.__nests[np.array([function(x)
                                         for x in self.__nests]).argmin()]
@@ -85,17 +85,17 @@ class cso(intelligence.sw):
 
         self._set_Gbest(Gbest)
 
-    def __nest(self):
-        self.__Nests.append([list(i) for i in self.__nests])
+    # def __nest(self):
+    #     self.__Nests.append([list(i) for i in self.__nests])
 
-    def __Levyfly(self, step, Pbest, n, dimension):
+    # def __Levyfly(self, step, Pbest, n, dimension):
 
-        for i in range(n):
-            stepsize = 0.2 * step * (self.__agents[i] - Pbest)
-            self.__agents[i] += stepsize * np.array([normalvariate(0, 1)
-                                                    for k in range(dimension)])
+    #     for i in range(n):
+    #         stepsize = 0.2 * step * (self.__agents[i] - Pbest)
+    #         self.__agents[i] += stepsize * np.array([normalvariate(0, 1)
+    #                                                 for k in range(dimension)])
 
-    def get_nests(self):
-        """Return a history of cuckoos nests (return type: list)"""
+    # def get_nests(self):
+    #     """Return a history of cuckoos nests (return type: list)"""
 
-        return self.__Nests
+    #     return self.__Nests

@@ -1,3 +1,5 @@
+import numpy as np
+
 class sw(object):
 
     def __init__(self):
@@ -27,7 +29,7 @@ class sw(object):
 
         bee = []
         for i in l:
-            new = [self.__neighbor(i, lb, ub) for k in range(c)]
+            new = [self._neighbor(i, lb, ub) for k in range(c)]
             bee += new
         bee += l
 
@@ -35,15 +37,15 @@ class sw(object):
 
     def _neighbor(self, who, lb, ub):
 
-        neighbor = np.array(who) + uniform(-1, 1) * (
+        neighbor = np.array(who) + np.random.uniform(-1, 1) * (
             np.array(who) - np.array(
-                self.__agents[randint(0, len(self.__agents) - 1)]))
+                self._agents[np.random.randint(0, len(self._agents) - 1)]))
         neighbor = np.clip(neighbor, lb, ub)
 
         return list(neighbor)
 
     def _nest(self):
-        self.__Nests.append([list(i) for i in self.__nests])
+        self.__Nests.append([list(i) for i in self._nests])
 
     def _Levyfly(self, Pbest, n, dimension):
 
