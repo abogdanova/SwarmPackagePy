@@ -1,4 +1,6 @@
+from math import gamma, pi, sin
 import numpy as np
+from random import normalvariate, randint, random
 
 class sw(object):
 
@@ -44,8 +46,11 @@ class sw(object):
 
         return list(neighbor)
 
-    def _nest(self):
-        self.__Nests.append([list(i) for i in self._nests])
+    def _velocity(self, Pbest, Gbest, n, dimension, velocity):
+        r1 = np.random.random((n, dimension))
+        r2 = np.random.random((n, dimension))
+        velocity = 0.5 * velocity + 1 * r1 * (Pbest - self._agents) + 1 * r2 * (Gbest - self._agents)
+        self._agents += velocity
 
     def _Levyfly(self, Pbest, n, dimension):
 
@@ -58,12 +63,7 @@ class sw(object):
         step = u / abs(v) ** (1 / beta)
 
         for i in range(n):
-            stepsize = 0.2 * step * (self.__agents[i] - Pbest)
-            self.__agents[i] += stepsize * np.array([normalvariate(0, 1)
+            stepsize = 0.2 * step * (self._agents[i] - Pbest)
+            self._agents[i] += stepsize * np.array([normalvariate(0, 1)
                                                     for k in range(dimension)])
-
-    def get_nests(self):
-        """Return a history of cuckoos nests (return type: list)"""
-
-        return self.__Nests
 

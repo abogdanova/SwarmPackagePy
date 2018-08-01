@@ -31,27 +31,27 @@ class pso(intelligence.sw):
 
         super(pso, self).__init__()
 
-        self.__agents = np.random.uniform(lb, ub, (n, dimension))
+        self._agents = np.random.uniform(lb, ub, (n, dimension))
         velocity = np.zeros((n, dimension))
-        self._points(self.__agents)
+        self._points(self._agents)
 
-        Pbest = self.__agents[np.array([function(x)
-                                        for x in self.__agents]).argmin()]
+        Pbest = self._agents[np.array([function(x)
+                                        for x in self._agents]).argmin()]
         Gbest = Pbest
 
         for t in range(iteration):
 
-            r1 = np.random.random((n, dimension))
-            r2 = np.random.random((n, dimension))
-            velocity = w * velocity + c1 * r1 * (
-                Pbest - self.__agents) + c2 * r2 * (
-                Gbest - self.__agents)
-            self.__agents += velocity
-            self.__agents = np.clip(self.__agents, lb, ub)
-            self._points(self.__agents)
+            # r1 = np.random.random((n, dimension))
+            # r2 = np.random.random((n, dimension))
+            # velocity = w * velocity + c1 * r1 * (
+            #     Pbest - self._agents) + c2 * r2 * (
+            #     Gbest - self._agents)
+            self._velocity(Pbest, Gbest, n, dimension, velocity)
+            self._agents = np.clip(self._agents, lb, ub)
+            self._points(self._agents)
 
-            Pbest = self.__agents[
-                np.array([function(x) for x in self.__agents]).argmin()]
+            Pbest = self._agents[
+                np.array([function(x) for x in self._agents]).argmin()]
             if function(Pbest) < function(Gbest):
                 Gbest = Pbest
 

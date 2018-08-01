@@ -25,33 +25,35 @@ class cso(intelligence.sw):
 
         super(cso, self).__init__()
 
-        self.__Nests = []
+        self._Nests = []
 
-        beta = 3 / 2
-        sigma = (gamma(1 + beta) * sin(pi * beta / 2) / (
-            gamma((1 + beta) / 2) * beta *
-            2 ** ((beta - 1) / 2))) ** (1 / beta)
-        u = np.array([normalvariate(0, 1) for k in range(dimension)]) * sigma
-        v = np.array([normalvariate(0, 1) for k in range(dimension)])
-        step = u / abs(v) ** (1 / beta)
+        # beta = 3 / 2
+        # sigma = (gamma(1 + beta) * sin(pi * beta / 2) / (
+        #     gamma((1 + beta) / 2) * beta *
+        #     2 ** ((beta - 1) / 2))) ** (1 / beta)
+        # u = np.array([normalvariate(0, 1) for k in range(dimension)]) * sigma
+        # v = np.array([normalvariate(0, 1) for k in range(dimension)])
+        # step = u / abs(v) ** (1 / beta)
 
-        self.__agents = np.random.uniform(lb, ub, (n, dimension))
-        self.__nests = np.random.uniform(lb, ub, (nest, dimension))
-        Pbest = self.__nests[np.array([function(x)
-                                       for x in self.__nests]).argmin()]
+        self._agents = np.random.uniform(lb, ub, (n, dimension))
+        self._nests = np.random.uniform(lb, ub, (nest, dimension))
+        Pbest = self._nests[np.array([function(x)
+                                       for x in self._nests]).argmin()]
         Gbest = Pbest
-        self._points(self.__agents)
+        self._points(self._agents)
 
         for t in range(iteration):
 
-            for i in self.__agents:
+            self._Levyfly(Pbest, n, dimension)
+            
+            for i in self._agents:
                 val = randint(0, nest - 1)
-                if function(i) < function(self.__nests[val]):
-                    self.__nests[val] = i
+                if function(i) < function(self._nests[val]):
+                    self._nests[val] = i
 
-            fnests = [(function(self.__nests[i]), i) for i in range(nest)]
+            fnests = [(function(self._nests[i]), i) for i in range(nest)]
             fnests.sort()
-            fcuckoos = [(function(self.__agents[i]), i) for i in range(n)]
+            fcuckoos = [(function(self._agents[i]), i) for i in range(n)]
             fcuckoos.sort(reverse=True)
 
             nworst = nest // 2
@@ -59,7 +61,7 @@ class cso(intelligence.sw):
 
             for i in worst_nests:
                 if random() < pa:
-                    self.__nests[i] = np.random.uniform(lb, ub, (1, dimension))
+                    self._nests[i] = np.random.uniform(lb, ub, (1, dimension))
 
             if nest > n:
                 mworst = n
@@ -69,16 +71,16 @@ class cso(intelligence.sw):
             for i in range(mworst):
 
                 if fnests[i][0] < fcuckoos[i][0]:
-                    self.__agents[fcuckoos[i][1]] = self.__nests[fnests[i][1]]
+                    self._agents[fcuckoos[i][1]] = self._nests[fnests[i][1]]
 
-            self.__nests = np.clip(self.__nests, lb, ub)
-            self._Levyfly(step, Pbest, n, dimension)
-            self.__agents = np.clip(self.__agents, lb, ub)
-            self._points(self.__agents)
-            self._nest()
+            self._nests = np.clip(self._nests, lb, ub)
+            # self._Levyfly(Pbest, n, dimension)
+            self._agents = np.clip(self._agents, lb, ub)
+            self._points(self._agents)
+            # self._nest()
 
-            Pbest = self.__nests[np.array([function(x)
-                                        for x in self.__nests]).argmin()]
+            Pbest = self._nests[np.array([function(x)
+                                        for x in self._nests]).argmin()]
 
             if function(Pbest) < function(Gbest):
                 Gbest = Pbest
