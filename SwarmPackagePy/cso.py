@@ -45,7 +45,7 @@ class cso(intelligence.sw):
         for t in range(iteration):
 
             self._Levyfly(Pbest, n, dimension)
-            
+
             for i in self._agents:
                 val = randint(0, nest - 1)
                 if function(i) < function(self._nests[val]):
@@ -56,23 +56,26 @@ class cso(intelligence.sw):
             fcuckoos = [(function(self._agents[i]), i) for i in range(n)]
             fcuckoos.sort(reverse=True)
 
-            nworst = nest // 2
-            worst_nests = [fnests[-i - 1][1] for i in range(nworst)]
+            # nworst = nest // 2
+            # worst_nests = [fnests[-i - 1][1] for i in range(nworst)]
 
-            for i in worst_nests:
-                if random() < pa:
-                    self._nests[i] = np.random.uniform(lb, ub, (1, dimension))
+            # for i in worst_nests:
+            #     if random() < pa:
+            #         self._nests[i] = np.random.uniform(lb, ub, (1, dimension))
 
-            if nest > n:
-                mworst = n
-            else:
-                mworst = nest
+            # if nest > n:
+            #     mworst = n
+            # else:
+            #     mworst = nest
 
-            for i in range(mworst):
+            # for i in range(mworst):
 
-                if fnests[i][0] < fcuckoos[i][0]:
-                    self._agents[fcuckoos[i][1]] = self._nests[fnests[i][1]]
+            #     if fnests[i][0] < fcuckoos[i][0]:
+            #         self._agents[fcuckoos[i][1]] = self._nests[fnests[i][1]]
 
+            self._drop_worst_chance(nest, lb, ub, dimension, function)
+            
+            self._ordered_swap(n, nest, function)
             self._nests = np.clip(self._nests, lb, ub)
             # self._Levyfly(Pbest, n, dimension)
             self._agents = np.clip(self._agents, lb, ub)

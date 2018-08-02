@@ -66,4 +66,27 @@ class sw(object):
             stepsize = 0.2 * step * (self._agents[i] - Pbest)
             self._agents[i] += stepsize * np.array([normalvariate(0, 1)
                                                     for k in range(dimension)])
+    
+    def _drop_worst_chance(self, nest, lb, ub, dimension, function):
+        fnests = [(function(self._nests[i]), i) for i in range(nest)]
+        fnests.sort()
+        nworst = nest // 2
+        worst_nests = [fnests[-i - 1][1] for i in range(nworst)]
 
+        for i in worst_nests:
+            if random() < 0.25:
+                self._nests[i] = np.random.uniform(lb, ub, (1, dimension))
+
+    def _ordered_swap(self, n, nest, function):
+        fnests = [(function(self._nests[i]), i) for i in range(nest)]
+        fnests.sort()
+        fcuckoos = [(function(self._agents[i]), i) for i in range(n)]
+        fcuckoos.sort(reverse=True)
+        if nest > n:
+            mworst = n
+        else:
+            mworst = nest
+
+        for i in range(mworst):
+            if fnests[i][0] < fcuckoos[i][0]:
+                self._agents[fcuckoos[i][1]] = self._nests[fnests[i][1]]
