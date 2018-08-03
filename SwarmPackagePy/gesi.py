@@ -26,6 +26,7 @@ class gesi(intelligence.sw):
 			
 			# swap
 			# swap = None
+			
 			swap = 1
 			for i in self._agents: 
 				val = np.random.randint(0, nest - 1)
@@ -33,13 +34,14 @@ class gesi(intelligence.sw):
 					self._nests[val] = i
 
 			# selection
-			selection = None
+			# selection = None
 
-			# drop_worst
-			# self._drop_worst_chance(nest, lb, ub, dimension, function)
+			drop_worst = 1
+			self._drop_worst_chance(nest, lb, ub, dimension, function)
 
 			# drop_worst and ordered swap
 			# swap = 1
+			# drop_worst = 1
 			# self._drop_worst_chance(nest, lb, ub, dimension, function)
 			# self._ordered_swap(n, nest, function)
 
