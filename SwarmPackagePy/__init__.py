@@ -88,6 +88,7 @@ from SwarmPackagePy.ca import ca
 from SwarmPackagePy.hs import hs
 from SwarmPackagePy.ssa import ssa
 from SwarmPackagePy.wsa import wsa
+from SwarmPackagePy.gesi import gesi
 from SwarmPackagePy.animation import animation, animation3D
 
 _version_ = '1.0.0'

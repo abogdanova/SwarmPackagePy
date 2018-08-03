@@ -1,9 +1,9 @@
 import numpy as np
 from . import intelligence
 
-class swarmge(intelligence.sw):
-	def __init__(n, function, lb, ub, dimention, iterations):
-		super(swarmge, self).__init__()
+class gesi(intelligence.sw):
+	def __init__(self, n, function, lb, ub, dimension, iteration):
+		super(gesi, self).__init__()
 		
 		# initial positions
 		self._agents = np.random.uniform(lb, ub, (n, dimension))
@@ -25,12 +25,12 @@ class swarmge(intelligence.sw):
 			# self._Levyfly(Pbest, n, dimension)
 			
 			# swap
-			swap = None
-			# swap = 1
-			# for i in self._agents: 
-			# 	val = randint(0, nest - 1)
-			# 	if function(i) < function(self._nests[val]):
-			# 		self._nests[val] = i
+			# swap = None
+			swap = 1
+			for i in self._agents: 
+				val = np.random.randint(0, nest - 1)
+				if function(i) < function(self._nests[val]):
+					self._nests[val] = i
 
 			# selection
 			selection = None
@@ -57,7 +57,7 @@ class swarmge(intelligence.sw):
 			if swap:
 				Pbest = self._nests[np.array([function(x) for x in self._nests]).argmin()]
 			else:
-				Pbest = self._agents[np.array([function(x) for x in self._agents]).argmin()
+				Pbest = self._agents[np.array([function(x) for x in self._agents]).argmin()]
 
 			# update best
 			if function(Pbest) < function(Gbest):
