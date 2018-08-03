@@ -20,32 +20,39 @@ class gesi(intelligence.sw):
 
 		# main loop
 		for t in range(iteration):
-			# update 
-			self._velocity(Pbest, Gbest, n, dimension, velocity)
-			# self._Levyfly(Pbest, n, dimension)
+			# update variants
+			# 1
+			# self._velocity(Pbest, Gbest, n, dimension, velocity)
 			
-			# swap
+			# 2
+			self._Levyfly(Pbest, n, dimension)
+			
+			# swap variants
+			# 1
 			# swap = None
-			
+
+			# 2
 			swap = 1
 			for i in self._agents: 
 				val = np.random.randint(0, nest - 1)
 				if function(i) < function(self._nests[val]):
 					self._nests[val] = i
 
-			# selection
+			# selection variants
+			# 1
 			# selection = None
 
-			drop_worst = 1
-			self._drop_worst_chance(nest, lb, ub, dimension, function)
-
-			# drop_worst and ordered swap
-			# swap = 1
+			# 2
 			# drop_worst = 1
 			# self._drop_worst_chance(nest, lb, ub, dimension, function)
-			# self._ordered_swap(n, nest, function)
 
-			# ordered_swap only
+			# 3
+			swap = 1
+			drop_worst = 1
+			self._drop_worst_chance(nest, lb, ub, dimension, function)
+			self._ordered_swap(n, nest, function)
+
+			# 4
 			# swap = 1
 			# self._ordered_swap(n, nest, function)
 
