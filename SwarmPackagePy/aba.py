@@ -21,7 +21,7 @@ class aba(intelligence.sw):
 
         super(aba, self).__init__()
 
-        self.__function = function
+        self._function = function
 
         self._agents = np.random.uniform(lb, ub, (n, dimension))
         self._points(self._agents)
