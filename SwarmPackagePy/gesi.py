@@ -14,15 +14,8 @@ class gesi(intelligence.sw):
 		Gbest = Pbest
 
 		# auxilary declarations
-		velocity = np.zeros((n, dimension))
 		nest = 100
 		self._nests = np.random.uniform(lb, ub, (nest, dimension))
-
-		a = n // 10
-		b = 5
-		c = (n - a * b - a) // 2
-		d = 2
-		count = a, b, c, d
 
 		# main loop
 		for t in range(iteration):
@@ -31,42 +24,32 @@ class gesi(intelligence.sw):
 			# self._velocity(Pbest, Gbest, n, dimension, velocity)
 			
 			# 2
-			self._Levyfly(Pbest, n, dimension)
+			# self._Levyfly(Pbest, n, dimension)
 			
 			# 3 (bee)
-			fitness = [function(x) for x in self._agents]
-			sort_fitness = [function(x) for x in self._agents]
-			sort_fitness.sort()
-
-			best = [self._agents[i] for i in [fitness.index(x) for x in sort_fitness[:count[0]]]]
-			selected = [self._agents[i] for i in [fitness.index(x) for x in sort_fitness[count[0]:count[2]]]]
-			newbee = self._newbee(best, count[1], lb, ub) + self._newbee(selected,count[3], lb, ub)
-			m = len(newbee)
-			self._agents = newbee + list(np.random.uniform(lb, ub, (n - m, dimension)))
+			self._bee(n, function, lb, ub, dimension)
+			
 			# swap variants
-			1
-			swap = None
+			# 1
+			# swap = None
 
 			# 2
 			# swap = 1
-			# for i in self._agents: 
-			# 	val = np.random.randint(0, nest - 1)
-			# 	if function(i) < function(self._nests[val]):
-			# 		self._nests[val] = i
+			# self._swap(nest, function)
 
 			# selection variants
-			1
-			selection = None
+			# 1
+			# selection = None
 
 			# 2
 			# drop_worst = 1
 			# self._drop_worst_chance(nest, lb, ub, dimension, function)
 
 			# 3
-			# swap = 1
-			# drop_worst = 1
-			# self._drop_worst_chance(nest, lb, ub, dimension, function)
-			# self._ordered_swap(n, nest, function)
+			swap = 1
+			drop_worst = 1
+			self._drop_worst_chance(nest, lb, ub, dimension, function)
+			self._ordered_swap(n, nest, function)
 
 			# 4
 			# swap = 1

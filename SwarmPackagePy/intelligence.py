@@ -47,6 +47,7 @@ class sw(object):
         return list(neighbor)
 
     def _velocity(self, Pbest, Gbest, n, dimension, velocity):
+        velocity = np.zeros((n, dimension))
         r1 = np.random.random((n, dimension))
         r2 = np.random.random((n, dimension))
         velocity = 0.5 * velocity + 1 * r1 * (Pbest - self._agents) + 1 * r2 * (Gbest - self._agents)
@@ -66,6 +67,14 @@ class sw(object):
             stepsize = 0.2 * step * (self._agents[i] - Pbest)
             self._agents[i] += stepsize * np.array([normalvariate(0, 1)
                                                     for k in range(dimension)])
+
+    def _bee(self, n, function, lb, ub, dimension):
+        count = self._count(n)
+        best = self._get_best(function, count)
+        selected = self._get_selected(function, count)
+        newbee = self._newbee(best, count[1], lb, ub) + self._newbee(selected, count[3], lb, ub)
+        m = len(newbee)
+        self._agents = newbee + list(np.random.uniform(lb, ub, (n - m, dimension)))
     
     def _drop_worst_chance(self, nest, lb, ub, dimension, function):
         fnests = [(function(self._nests[i]), i) for i in range(nest)]
@@ -90,3 +99,35 @@ class sw(object):
         for i in range(mworst):
             if fnests[i][0] < fcuckoos[i][0]:
                 self._agents[fcuckoos[i][1]] = self._nests[fnests[i][1]]
+
+    def _get_best(self, function, count):
+        fitness = [function(x) for x in self._agents]
+        sort_fitness = [function(x) for x in self._agents]
+        sort_fitness.sort()
+        best = [self._agents[i] for i in [fitness.index(x) for x in sort_fitness[:count[0]]]]
+        return best
+
+    def _get_selected(self, function, count):
+        fitness = [function(x) for x in self._agents]
+        sort_fitness = [function(x) for x in self._agents]
+        sort_fitness.sort()
+        selected = [self._agents[i] for i in [fitness.index(x) for x in sort_fitness[count[0]:count[2]]]]
+        return selected
+
+    def _swap(self, nest, function):
+        for i in self._agents: 
+            val = np.random.randint(0, nest - 1)
+            if function(i) < function(self._nests[val]):
+                self._nests[val] = i
+    
+    def _count(self, n):
+        if n <= 10:
+            count = n - n // 2, 1, 1, 1
+        else:
+            a = n // 10
+            b = 5
+            c = (n - a * b - a) // 2
+            d = 2
+            count = a, b, c, d
+        return count
+
